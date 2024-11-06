@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Input Tanggal</title>
+    <!-- Tambahkan jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Tambahkan CSS untuk styling -->
+    <style>
+        /* Umum */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #000000, #676767);
+            color: #333;
+        }
+
+        h2, h3 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 320px;
+            padding: 25px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus {
+            border-color: #4a90e2;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            background-color: #4a90e2;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #357ABD;
+        }
+
+        /* Styling tabel */
+        table {
+            margin-top: 20px;
+            width: 90%;
+            max-width: 600px;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4a90e2;
+            color: #fff;
+        }
+
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn:hover {
+            background-color: #e60000;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Form Input Tanggal</h2>
+    
+    <form id="tanggalForm">
+        <label for="nama">Nama:</label>
+        <input type="text" id="nama" name="nama" required placeholder="Masukkan nama">
+        
+        <label for="tanggal_pembuatan">Tanggal Pembuatan:</label>
+        <input type="date" id="tanggal_pembuatan" name="tanggal_pembuatan" required>
+        
+        <label for="tanggal_deadline">Tanggal Deadline:</label>
+        <input type="date" id="tanggal_deadline" name="tanggal_deadline" required>
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <h3>Hasil Input:</h3>
+    
+    <table id="hasilTable">
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Tanggal Pembuatan</th>
+                <th>Tanggal Deadline</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Baris data input akan ditambahkan di sini -->
+        </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function() {
+            $('#tanggal_pembuatan').on('change', function() {  // Saat tanggal_pembuatan berubah
+                var tanggalPembuatan = $(this).val();  // Ambil nilai tanggal pembuatan
+                $('#tanggal_deadline').attr('min', tanggalPembuatan);  // Tetapkan tanggal minimum untuk tanggal_deadline
+            });
+
+            $('#tanggalForm').on('submit', function(event) {  // Fungsi ini dijalankan saat form disubmit
+                event.preventDefault();  // Mencegah reload halaman pada submit
+
+                var nama = $('#nama').val();  // Ambil nilai dari input 'nama'
+                var tanggalPembuatan = $('#tanggal_pembuatan').val();  // Ambil nilai dari input 'tanggal_pembuatan'
+                var tanggalDeadline = $('#tanggal_deadline').val();  // Ambil nilai dari input 'tanggal_deadline'
+
+                // Tambahkan baris baru ke tabel dengan data yang diinput
+                var row = $(`
+                    <tr>
+                        <td>${nama}</td>
+                        <td>${tanggalPembuatan}</td>
+                        <td>${tanggalDeadline}</td>
+                        <td><button class="delete-btn">Delete</button></td>
+                    </tr>
+                `);
+
+                row.find('.delete-btn').on('click', function() {  // Event handler tombol delete pada baris
+                    row.remove();  // Hapus baris ini dari tabel
+                });
+
+                $('#hasilTable tbody').append(row);  // Tambahkan baris baru ke dalam tabel hasil
+
+                $('#tanggalForm')[0].reset();  // Reset form setelah submit
+                $('#tanggal_deadline').attr('min', '');  // Reset tanggal minimum untuk tanggal_deadline
+            });
+        });
+    </script>
+
+</body>
+</html>
